@@ -1,0 +1,307 @@
+Description: wa11y.co
+Resources:
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: wa11y.co
+      DomainValidationOptions:
+        - DomainName: wa11y.co
+          HostedZoneId:
+            Ref: HostedZone
+      SubjectAlternativeNames:
+        - "*.wa11y.co"
+      ValidationMethod: DNS
+
+  HostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: wa11y.co
+
+  Dkim1:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Ref: HostedZone
+      Name: fm1._domainkey.wa11y.co
+      ResourceRecords:
+        - fm1.wa11y.co.dkim.fmhosted.com
+      TTL: 3600
+      Type: CNAME
+
+  Dkim2:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Ref: HostedZone
+      Name: fm2._domainkey.wa11y.co
+      ResourceRecords:
+        - fm2.wa11y.co.dkim.fmhosted.com
+      TTL: 3600
+      Type: CNAME
+
+  Dkim3:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Ref: HostedZone
+      Name: fm3._domainkey.wa11y.co
+      ResourceRecords:
+        - fm3.wa11y.co.dkim.fmhosted.com
+      TTL: 3600
+      Type: CNAME
+
+  DkimMesmtp:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Ref: HostedZone
+      Name: mesmtp._domainkey.wa11y.co
+      ResourceRecords:
+        - mesmtp.wa11y.co.dkim.fmhosted.com
+      TTL: 3600
+      Type: CNAME
+
+  Mx:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Ref: HostedZone
+      Name: wa11y.co
+      ResourceRecords:
+        - 10 in1-smtp.messagingengine.com
+        - 20 in2-smtp.messagingengine.com
+      TTL: 3600
+      Type: MX
+
+  Txt:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Ref: HostedZone
+      Name: wa11y.co
+      ResourceRecords:
+        - '"v=spf1 include:spf.messagingengine.com ?all"'
+      TTL: 3600
+      Type: TXT
+
+  CachePolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        DefaultTTL: 600
+        MaxTTL: 31536000
+        MinTTL: 600
+        Name:
+          Fn::Sub: ${AWS::StackName}
+        ParametersInCacheKeyAndForwardedToOrigin:
+          CookiesConfig:
+            CookieBehavior: none
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            # Allow cache busting via query strings (i.e. "style.css?v2" to
+            # ignore the cached "style.css" and get the latest content).
+            QueryStringBehavior: all
+
+  OriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment:
+          Fn::Sub: ${AWS::StackName}
+
+  ViewerRequest:
+    Type: AWS::CloudFront::Function
+    Properties:
+      AutoPublish: true
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var host = request.headers.host ? request.headers.host.value : undefined;
+
+          if (host && host.startsWith('www.'))
+            return {
+              statusCode: 301,
+              statusDescription: 'Redirect',
+              headers: {
+                location: {
+                  value: 'https://' + host.substring(4) + request.uri
+                }
+              }
+            }
+
+          if (request.uri.endsWith('/'))
+            request.uri += 'index.html';
+          else if (!request.uri.includes('.'))
+            request.uri += '/index.html';
+
+          return request;
+        }
+
+      FunctionConfig:
+        Comment: ViewerRequest
+        Runtime: cloudfront-js-1.0
+
+      # CloudFront Functions are global so need globally-safe names.
+      Name:
+        Fn::Sub: ${AWS::StackName}-${AWS::Region}-ViewerRequest
+
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - wa11y.co
+          - www.wa11y.co
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          CachePolicyId:
+            Ref: CachePolicy
+          Compress: true
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN:
+                Ref: ViewerRequest
+          ResponseHeadersPolicyId:
+            Ref: ResponseHeadersPolicy
+          TargetOriginId: website
+          ViewerProtocolPolicy: redirect-to-https
+
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        Origins:
+          - DomainName:
+              Fn::Sub: ${Bucket}.s3.${AWS::Region}.amazonaws.com
+            Id: website
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Sub: origin-access-identity/cloudfront/${OriginAccessIdentity}
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn:
+            Ref: Certificate
+          MinimumProtocolVersion: TLSv1.2_2021
+          SslSupportMethod: sni-only
+
+  ResponseHeadersPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name:
+          Fn::Sub: ${AWS::StackName}
+        CustomHeadersConfig:
+          Items:
+            - Header: Content-Security-Policy-Report-Only
+              Override: true
+              Value:
+                "default-src
+                  'none';
+                img-src
+                  https://cdn.usefathom.com/;
+                report-uri
+                  https://antagonist.report-uri.com/r/d/csp/reportOnly;
+                script-src
+                  'self'
+                  'report-sample'
+                  https://cdn.usefathom.com/;"
+
+            - Header: Report-To
+              Override: true
+              Value: '{
+                        "group": "default",
+                        "max_age": 31536000,
+                        "endpoints": [{
+                          "url": "https://antagonist.report-uri.com/a/d/g"
+                        }],
+                        "include_subdomains": true
+                      }'
+
+            - Header: NEL
+              Override: true
+              Value: '{
+                        "report_to": "default",
+                        "max_age": 31536000,
+                        "include_subdomains": true
+                      }'
+
+        SecurityHeadersConfig:
+          ContentTypeOptions:
+            Override: false
+          FrameOptions:
+            FrameOption: DENY
+            Override: true
+          ReferrerPolicy:
+            ReferrerPolicy: strict-origin-when-cross-origin
+            Override: true
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 63072000
+            IncludeSubdomains: true
+            Preload: true
+            Override: true
+          XSSProtection:
+            ModeBlock: true
+            Protection: true
+            Override: true
+
+  RootRecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName:
+          Fn::Sub: ${CloudFrontDistribution.DomainName}
+        HostedZoneId: Z2FDTNDATAQYW2  # AWS ID for aliases # cspell:disable-line
+      HostedZoneId:
+        Ref: HostedZone
+      Name: wa11y.co
+      Type: A
+
+  WwwRecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName:
+          Fn::Sub: ${CloudFrontDistribution.DomainName}
+        HostedZoneId: Z2FDTNDATAQYW2  # AWS ID for aliases # cspell:disable-line
+      HostedZoneId:
+        Ref: HostedZone
+      Name: www.wa11y.co
+      Type: A
+
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      WebsiteConfiguration:
+        ErrorDocument: error.html
+        IndexDocument: index.html
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: Bucket
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::Sub:
+                  arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity
+                  ${OriginAccessIdentity}
+            Resource:
+              Fn::Sub: arn:aws:s3:::${Bucket}/*
