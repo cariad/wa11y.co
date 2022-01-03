@@ -72,24 +72,35 @@ const blockTypes = (line) => {
 
   while (actualIndex < line.length) {
     switch (line.charCodeAt(actualIndex)) {
+      // Dark mode:
+      case 11035:
+      // Light mode:
       case 11036:
         actualIndex += 1;
         visualIndex += 1;
         break;
       case 55357:
         switch (line.charCodeAt(actualIndex + 1)) {
+          // High contrast:
+          case 57318:
+          // Regular contrast:
           case 57320:
             misplacedIndexes.push(visualIndex++);
             break;
+          // High contrast:
+          case 57319:
+          // Regular contrast:
           case 57321:
             perfectIndexes.push(visualIndex++);
             break;
           default:
+            // console.log('color', line[visualIndex], line.charCodeAt(actualIndex+1));
             return undefined;
         }
         actualIndex += 2;
         break;
       default:
+        // console.log(line[visualIndex], line.charCodeAt(actualIndex));
         return undefined;
     }
   }
