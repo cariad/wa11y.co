@@ -10,7 +10,7 @@
     <script src="https://cdn.usefathom.com/script.js" data-site="KAZHHUJK" defer></script>
 
     <link rel="icon"         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>" />
-    <link rel="stylesheet"   href="/style.css?v=2.0" />
+    <link rel="stylesheet"   href="/style.css?v=2.1" />
 
     <meta name="author"      content="Cariad Eccleston" />
     <meta name="description" content="Generates descriptive text for Wordle endgames." />
@@ -20,7 +20,16 @@
   <body>
 
     <div id="content">
-      <h1>Wordle Accessibility</h1>
+
+      <header>
+        <h1>Wordle Accessibility</h1>
+        <p>
+          At the end of your <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a>
+          game, click "Share" to copy your result then paste it below to generate
+          descriptive text.
+        </p>
+      </header>
+
       <div id="app">
         <div id="input-container">
           <label for="input">Your Wordle result:</label>
@@ -30,6 +39,7 @@
             autocorrect="false"
             cols="15"
             id="input"
+            placeholder="Paste your game result here."
             rows="8"
             spellcheck="false"
           ></textarea>
@@ -43,15 +53,15 @@
         </div>
       </div>
 
-      <div id="credit">
-        <p><a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> &copy;<a
-            href="https://www.powerlanguage.co.uk/">Josh Wardle</a>, <a
-            href="https://twitter.com/powerlanguish">@powerlanguish</a>.
-          wa11y.co built by <a href="https://cariad.earth/">Cariad
-            Eccleston</a>, <a
-            href="https://twitter.com/antagonistapp/">@antagonistapp</a>.
-          wa11y.co source and bug reports: <a
-            href="https://github.com/cariad/wa11y.co">github.com/cariad/wa11y.co</a>.
+      <footer id="credit">
+        <p>
+          <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> &copy; <a
+          href="https://www.powerlanguage.co.uk/">Josh Wardle</a> (<a
+          href="https://twitter.com/powerlanguish">@powerlanguish</a>).
+          wa11y.co by <a href="https://cariad.earth/">Cariad Eccleston</a>
+          (<a href="https://twitter.com/antagonistapp/">@antagonistapp</a>).
+          Source and bug reports: <a
+          href="https://github.com/cariad/wa11y.co">cariad/wa11y.co</a>.
         </p>
       </div>
 

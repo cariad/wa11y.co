@@ -6,11 +6,18 @@ body {
 }
 
 h1 {
+  text-align: center;
   margin-top: 0;
   margin-bottom: 1rem;
 }
 
+header,
+footer {
+  max-width: 36rem;
+}
+
 p {
+  line-height: 1.4;
   margin: 0;
 }
 
@@ -37,6 +44,8 @@ textarea {
 #app {
   display: flex;
   gap: 10px;
+  margin-top: var(--vertical-spacing);
+  margin-bottom: var(--vertical-spacing);
   margin-inline: auto;
   max-width: max(100%, 55rem);
   width: 100%;
@@ -53,12 +62,6 @@ textarea {
   flex-grow: 1;
 }
 
-#credit {
-  text-align: center;
-  max-width: 50em;
-  line-height: 1.5;
-}
-
 button {
   height: 3rem;
   margin-top: 0.4rem;
@@ -66,6 +69,7 @@ button {
 
 @media (orientation: landscape) {
   body {
+    --vertical-spacing: 3rem;
     align-items: center;
     min-height: 100vh;
   }
@@ -82,11 +86,12 @@ button {
 
 @media (orientation: portrait) {
   body {
+    --vertical-spacing: 1rem;
     margin-top: 1rem;
   }
 
   h1 {
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
 
   #app {
@@ -99,6 +104,5 @@ button {
 
   #output {
     height: 33vh;
-    /* height: 100%; */
   }
 }
