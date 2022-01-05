@@ -1,11 +1,10 @@
-// const copy = document.getElementById('copy');
-// copy.addEventListener('click', () => {
-//   navigator.clipboard.writeText(output.value);
-// });
+// The maximum length of generated text before it + emoji won't fit in a tweet.
+const maxGenLength = 196;
 
 const tweet = document.getElementById('tweet');
 tweet.addEventListener('click', () => {
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURI(output.value)}`);
+  const encoded = encodeURI(output.value).replaceAll('&', '%26');
+  window.open(`https://twitter.com/intent/tweet?text=${encoded}`);
 });
 
 const input = document.getElementById('input');
@@ -24,34 +23,46 @@ const describe = (indexes) => {
     })
 };
 
-const describeLine = (line, num) => {
+const describeLine = (line, num, chopAggression) => {
   const decoded = blockTypes(line);
 
   const hasPerfect = decoded.perfectIndexes.length > 0;
   const hasMisplaced = decoded.misplacedIndexes.length > 0;
 
-  const perfect = hasPerfect ? `${describe(decoded.perfectIndexes)} perfect` : null;
+  const perfectWord = chopAggression >= 8 ? 'yes' : 'perfect';
+  const perfect = hasPerfect ? `${describe(decoded.perfectIndexes)} ${perfectWord}` : null;
 
   const misplacedList = describe(decoded.misplacedIndexes);
 
-  const misplaced = hasPerfect ? `, but ${misplacedList} in the wrong place` : `${misplacedList} correct but in the wrong place`;
+  const wrongPlace = chopAggression >= 6 ? chopAggression >= 7 ? 'no' : 'wrong' : 'in the wrong place';
+  const correctBut = chopAggression >= 3 ? `${misplacedList} ${wrongPlace}` : `${misplacedList} correct but ${wrongPlace}`;
+  const perfectBut = chopAggression >= 2 ? `. ${misplacedList} ${wrongPlace}` : `, but ${misplacedList} ${wrongPlace}`
+
+  const misplaced = hasPerfect ? perfectBut : correctBut;
 
   let explanation = '';
 
   if (!hasPerfect && !hasMisplaced)
-    explanation = 'nothing.';
+    explanation = 'Nothing.';
   else if (decoded.perfectIndexes.length === 5)
-    explanation = 'got it!';
+    explanation = 'Won!';
   else if (decoded.misplacedIndexes.length === 5)
-    explanation = 'all the correct letters but in the wrong order.';
+    explanation = chopAggression >= 1 ? 'all in the wrong order.' : 'all the correct letters but in the wrong order.';
   else if (hasPerfect && hasMisplaced)
     explanation = `${perfect}${misplaced}.`
   else if (hasMisplaced)
     explanation = `${misplaced}.`
   else
-    explanation = `${perfect}!`
+    explanation = `${perfect}.`
 
-  output.value += `Line ${num}: ${explanation}\n`;
+  const prefix = chopAggression >= 5 ? `${num}.` : `Line ${num}:`;
+
+  const result = `${prefix} ${explanation}\n`
+
+  if (chopAggression >= 4)
+    return result.replaceAll(' and ', ' & ');
+
+  return result;
 }
 
 const ord = (i) => {
@@ -94,13 +105,11 @@ const blockTypes = (line) => {
             perfectIndexes.push(visualIndex++);
             break;
           default:
-            // console.log('color', line[visualIndex], line.charCodeAt(actualIndex+1));
             return undefined;
         }
         actualIndex += 2;
         break;
       default:
-        // console.log(line[visualIndex], line.charCodeAt(actualIndex));
         return undefined;
     }
   }
@@ -118,20 +127,33 @@ const isGameLine = (line) => {
 input.addEventListener('input', () => {
   output.value = '';
   const lines = input.value.split('\n');
-  const gameLines = [];
+  const emojiLines = [];
 
   lines.forEach((line) => {
-    if (isGameLine(line)) {
-      gameLines.push(line);
-      describeLine(line, gameLines.length);
-    }
+    if (isGameLine(line))
+      emojiLines.push(line);
     else
       output.value += `${line}\n`;
   });
 
+  const descriptiveLines = [];
+  let chopAggression = 0;
+
+  while (chopAggression === 0 || descriptiveLines.join('\n').length > maxGenLength ) {
+    descriptiveLines.splice(0,descriptiveLines.length);
+    emojiLines.forEach((line) => {
+      descriptiveLines.push(describeLine(line, descriptiveLines.length + 1, chopAggression));
+    });
+    if (chopAggression++> 20) break;
+  }
+
+  descriptiveLines.forEach((line) => {
+    output.value += line;
+  });
+
   output.value += '\n';
 
-  gameLines.forEach((line) => {
+  emojiLines.forEach((line) => {
     output.value += `${line}\n`;
   });
 
