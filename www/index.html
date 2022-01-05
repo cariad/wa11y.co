@@ -2,24 +2,40 @@
 <html lang="en">
 
   <head>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>wa11y.co</title>
+    <title>wa11y.co: Wordle Accessibility</title>
     <script src="/index.js?v=4" defer></script>
     <script src="https://cdn.usefathom.com/script.js" data-site="KAZHHUJK" defer></script>
-    <link rel="stylesheet" href="/style.css?v=18" />
+
+    <link rel="icon"         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>" />
+    <link rel="stylesheet"   href="/style.css?v=2.0" />
+
+    <meta name="author"      content="Cariad Eccleston" />
+    <meta name="description" content="Generates descriptive text for Wordle endgames." />
+
   </head>
 
   <body>
 
     <div id="content">
-
+      <h1>Wordle Accessibility</h1>
       <div id="app">
-        <textarea autocomplete="false" autocorrect="false" autofocus="true"
-          cols="15" id="input" placeholder="Paste your game result here."
-          rows="8" spellcheck="false"></textarea>
-
+        <div id="input-container">
+          <label for="input">Your Wordle result:</label>
+          <!-- We intentionally do not autofocus this input: https://github.com/cariad/wa11y.co/issues/4 -->
+          <textarea
+            autocomplete="false"
+            autocorrect="false"
+            cols="15"
+            id="input"
+            rows="8"
+            spellcheck="false"
+          ></textarea>
+        </div>
         <div id="output-container">
+          <label for="output">Shareable:</label>
           <textarea autocomplete="false" autocorrect="false"
             id="output" readonly="true" rows="15" spellcheck="false"></textarea>
           <!-- <button id="copy">Copy</button> -->
