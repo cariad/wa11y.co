@@ -6,6 +6,7 @@
     "domainkey",
     "fmhosted",
     "mesmtp",
-    "messagingengine"
+    "messagingengine",
+    "Wordle"
   ]
 }
