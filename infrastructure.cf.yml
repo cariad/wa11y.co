@@ -207,13 +207,18 @@ Resources:
                 "default-src
                   'none';
                 img-src
+                  data:
                   https://cdn.usefathom.com/;
                 report-uri
                   https://antagonist.report-uri.com/r/d/csp/reportOnly;
                 script-src
                   'self'
                   'report-sample'
-                  https://cdn.usefathom.com/;"
+                  https://cdn.usefathom.com/;
+                style-src
+                  'self';
+                style-src-elem
+                  'self';"
 
             - Header: Report-To
               Override: true
