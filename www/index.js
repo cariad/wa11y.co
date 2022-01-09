@@ -167,7 +167,7 @@ const render = () => {
 input.addEventListener('input', render);
 
 const handleIncludeEmoji = (include) => {
-  maxGenLength = include ? 196 : 500;
+  maxGenLength = include ? 196 : 280;
   render();
 }
 
