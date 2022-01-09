@@ -1,5 +1,7 @@
 // The maximum length of generated text before it + emoji won't fit in a tweet.
-const maxGenLength = 196;
+let maxGenLength = 196;
+
+const includeEmoji = document.getElementById('include-emoji');
 
 const tweet = document.getElementById('tweet');
 tweet.addEventListener('click', () => {
@@ -124,7 +126,7 @@ const isGameLine = (line) => {
   return line && line.length > 0 && blockTypes(line) !== undefined;
 }
 
-input.addEventListener('input', () => {
+const render = () => {
   output.value = '';
   const lines = input.value.split('\n');
   const emojiLines = [];
@@ -151,11 +153,39 @@ input.addEventListener('input', () => {
     output.value += line;
   });
 
-  output.value += '\n';
+  if (includeEmoji.checked) {
+    output.value += '\n';
 
-  emojiLines.forEach((line) => {
-    output.value += `${line}\n`;
-  });
+    emojiLines.forEach((line) => {
+      output.value += `${line}\n`;
+    });
+  }
 
   output.value = output.value.trim();
+}
+
+input.addEventListener('input', render);
+
+const handleIncludeEmoji = (include) => {
+  maxGenLength = include ? 196 : 500;
+  render();
+}
+
+if (document.cookie === 'include-emoji=true') {
+  includeEmoji.checked = true;
+  handleIncludeEmoji(true);
+} else
+  handleIncludeEmoji(false);
+
+includeEmoji.addEventListener('change', () => {
+  if (includeEmoji.checked) {
+    alert(
+      'Emojis are beautiful, but can be frustrating for folks who use screen readers and other accessibility tools.' +
+      '\n\n' +
+      'Please consider your audience before tweeting. ❤️'
+    );
+  }
+
+  document.cookie = `include-emoji=${includeEmoji.checked.toString()}; SameSite=Strict`;
+  handleIncludeEmoji(includeEmoji.checked);
 });
