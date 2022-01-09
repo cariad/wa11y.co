@@ -62,9 +62,23 @@ textarea {
   flex-grow: 1;
 }
 
+#include-emoji-container {
+  margin-top: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+#include-emoji-container input {
+  float: left;
+  margin-right: 0.4rem;
+}
+
+#include-emoji-container label {
+  display: block;
+}
+
 button {
   height: 3rem;
-  margin-top: 0.4rem;
+  margin-top: 0.3rem;
 }
 
 @media (orientation: landscape) {
