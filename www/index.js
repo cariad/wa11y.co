@@ -141,7 +141,7 @@ const render = () => {
   const descriptiveLines = [];
   let chopAggression = 0;
 
-  while (chopAggression === 0 || descriptiveLines.join('\n').length > maxGenLength ) {
+  while (chopAggression === 0 || descriptiveLines.join('\n').length + output.value.length > maxGenLength ) {
     descriptiveLines.splice(0,descriptiveLines.length);
     emojiLines.forEach((line) => {
       descriptiveLines.push(describeLine(line, descriptiveLines.length + 1, chopAggression));
