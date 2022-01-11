@@ -2,7 +2,7 @@ import ColorSet from "./color-set.mjs";
 import WordleShareParsed from "./wordle-share-parsed.mjs";
 import generateWordleImageBlob from "./generate-wordle-image.mjs";
 
-//  Grab (or create) elements
+//  Grab  elements
 
 const input = document.getElementById('input');
 const output = document.getElementById('output');
