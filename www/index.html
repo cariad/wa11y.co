@@ -45,11 +45,20 @@
           ></textarea>
         </div>
         <div id="output-container">
-          <label for="output">Shareable:</label>
-          <textarea autocomplete="false" autocorrect="false"
-            id="output" readonly="true" rows="15" spellcheck="false"></textarea>
-          <!-- <button id="copy">Copy</button> -->
-          <button id="tweet">Tweet</button>
+          <label for="output">Shareable result:</label>
+
+          <img id="output" alt="" />
+
+          <div id="output-options-container">
+            <input id="use-light-mode-checkbox" type="checkbox" />
+            <label for="use-light-mode-checkbox">Light mode</label>
+
+            <input id="use-high-contrast-checkbox" type="checkbox" />
+            <label for="use-high-contrast-checkbox">High contrast mode</label>
+          </div>
+          
+          <button id="copy-image-btn">Copy image</button>
+          <button id="copy-alt-text-btn">Copy alt text</button>
         </div>
       </div>
 

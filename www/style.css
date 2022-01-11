@@ -62,6 +62,12 @@ textarea {
   flex-grow: 1;
 }
 
+#output {
+  max-width: 420px;
+  width: 100%;
+  height: auto;
+}
+
 button {
   height: 3rem;
   margin-top: 0.4rem;
@@ -100,9 +106,5 @@ button {
 
   #input {
     height: 11em;
-  }
-
-  #output {
-    height: 33vh;
   }
 }
