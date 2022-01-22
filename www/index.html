@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
   <head>
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>wa11y.co: Wordle Accessibility</title>
+    <title>Termo acessível</title>
     <script src="/index.js?v=2.4" defer></script>
     <script src="https://cdn.usefathom.com/script.js" data-site="KAZHHUJK" defer></script>
 
@@ -13,7 +13,7 @@
     <link rel="stylesheet"   href="/style.css?v=2.2" />
 
     <meta name="author"      content="Cariad Eccleston" />
-    <meta name="description" content="Generates descriptive text for Wordle endgames." />
+    <meta name="description" content="Gera texto alternativo para jogos como Wordle e Termo" />
 
   </head>
 
@@ -22,35 +22,34 @@
     <div id="content">
 
       <header>
-        <h1>Wordle Accessibility</h1>
+        <h1>Termo acessível</h1>
         <p>
-          At the end of your <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a>
-          game, click "Share" to copy your result then paste it below to generate
-          descriptive text.
+          No final do seu<a href="https://term.ooo/">Termo</a>
+          jogo, clica "Compartilhar" para copiar o seu resultado e depois cole-o abaixo para gerar um texto descritivo.
         </p>
       </header>
 
       <div id="app">
         <div id="input-container">
-          <label for="input">Your Wordle result:</label>
+          <label for="input">Seu resultado no term.ooo:</label>
           <!-- We intentionally do not autofocus this input: https://github.com/cariad/wa11y.co/issues/4 -->
           <textarea
             autocomplete="false"
             autocorrect="false"
             cols="15"
             id="input"
-            placeholder="Paste your game result here."
+            placeholder="Cole seu resultado do seu jogo aqui."
             rows="8"
             spellcheck="false"
           ></textarea>
         </div>
         <div id="output-container">
-          <label for="output">Shareable:</label>
+          <label for="output">Compartilhe:</label>
           <textarea autocomplete="false" autocorrect="false"
             id="output" readonly="true" rows="15" spellcheck="false"></textarea>
           <div id="include-emoji-container">
             <input id="include-emoji" type="checkbox" />
-            <label for="include-emoji">Include emoji</label>
+            <label for="include-emoji">Incluir emoji</label>
           </div>
           <button id="tweet">Tweet</button>
         </div>
@@ -58,13 +57,13 @@
 
       <footer id="credit">
         <p>
-          <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> &copy; <a
-          href="https://www.powerlanguage.co.uk/">Josh Wardle</a> (<a
-          href="https://twitter.com/powerlanguish">@powerlanguish</a>).
-          wa11y.co by <a href="https://cariad.earth/">Cariad Eccleston</a>
+          <a href="https://term.ooo/">Termo</a> &copy; <a
+          href="https://term.ooo/>Fernando Serboncini</a> (<a
+          href="https://twitter.com/fserb">@@fserb</a>).
+          wa11y.co por <a href="https://github.com/cariad/wa11y.co">Cariad Eccleston</a>
           (<a href="https://twitter.com/antagonistapp/">@antagonistapp</a>).
-          Source and bug reports: <a
-          href="https://github.com/cariad/wa11y.co">cariad/wa11y.co</a>.
+          Traduzido por <a href="https://anacuentro.com.br/">Ana Cuentro</a>
+          (<a href="https://twitter.com/anacuentro/">@anacuentro</a>).
         </p>
       </div>
 
