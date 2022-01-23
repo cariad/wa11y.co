@@ -61,6 +61,17 @@ Resources:
       TTL: 3600
       Type: CNAME
 
+  PtTranslation:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Ref: HostedZone
+      Name: pt.wa11y.co
+      ResourceRecords:
+        - anacuentro.github.io
+      TTL: 3600
+      Type: CNAME
+
   Mx:
     Type: AWS::Route53::RecordSet
     Properties:
