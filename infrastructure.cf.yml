@@ -61,6 +61,17 @@ Resources:
       TTL: 3600
       Type: CNAME
 
+  Img:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId:
+        Ref: HostedZone
+      Name: img.wa11y.co
+      ResourceRecords:
+        - cname.vercel-dns.com
+      TTL: 3600
+      Type: CNAME
+
   PtTranslation:
     Type: AWS::Route53::RecordSet
     Properties:
