@@ -62,18 +62,10 @@ textarea {
   flex-grow: 1;
 }
 
-#include-emoji-container {
-  margin-top: 0.6rem;
-  margin-bottom: 0.4rem;
-}
-
-#include-emoji-container input {
-  float: left;
-  margin-right: 0.4rem;
-}
-
-#include-emoji-container label {
-  display: block;
+#output {
+  max-width: 420px;
+  width: 100%;
+  height: auto;
 }
 
 button {
@@ -114,9 +106,5 @@ button {
 
   #input {
     height: 11em;
-  }
-
-  #output {
-    height: 33vh;
   }
 }

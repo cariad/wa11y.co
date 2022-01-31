@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
     <title>wa11y.co: Wordle Accessibility</title>
-    <script src="/index.js?v=2.4" defer></script>
+    <script src="/js/index.mjs?v=2.4" defer type="module"></script>
     <script src="https://cdn.usefathom.com/script.js" data-site="KAZHHUJK" defer></script>
 
     <link rel="icon"         href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>" />
@@ -45,14 +45,20 @@
           ></textarea>
         </div>
         <div id="output-container">
-          <label for="output">Shareable:</label>
-          <textarea autocomplete="false" autocorrect="false"
-            id="output" readonly="true" rows="15" spellcheck="false"></textarea>
-          <div id="include-emoji-container">
-            <input id="include-emoji" type="checkbox" />
-            <label for="include-emoji">Include emoji</label>
+          <label for="output">Shareable result:</label>
+
+          <img id="output" alt="" />
+
+          <div id="output-options-container">
+            <input id="use-light-mode-checkbox" type="checkbox" />
+            <label for="use-light-mode-checkbox">Light mode</label>
+
+            <input id="use-high-contrast-checkbox" type="checkbox" />
+            <label for="use-high-contrast-checkbox">High contrast mode</label>
           </div>
-          <button id="tweet">Tweet</button>
+          
+          <button id="copy-image-btn">Copy image</button>
+          <button id="copy-alt-text-btn">Copy alt text</button>
         </div>
       </div>
 
