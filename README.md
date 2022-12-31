@@ -6,6 +6,7 @@ Inspired by, and with thanks to, [@magslhalliday](https://twitter.com/magslhalli
 
 ## Changelog
 
+- **2022-12-31:** Replaced the link to my dead Twitter account with a link to my live Mastodon account.
 - **2022-01-09:** Made emojis optional and fixed [Can you limit character count](https://github.com/cariad/wa11y.co/issues/12).
 - **2022-01-08:** Fixed [Console errors](https://github.com/cariad/wa11y.co/issues/9) -- thank you, [@EnduringBeta](https://github.com/EnduringBeta)!
 - **2022-01-05:** Fixed [Other accessible items for wa11y.co](https://github.com/cariad/wa11y.co/issues/4) (thank you, [@beltonTPG](https://github.com/beltonTPG)!) and [Generated text can be too long to tweet](https://github.com/cariad/wa11y.co/issues/3).
